@@ -6,6 +6,7 @@ interface ButtonBaseProps {
   variant?: 'contained' | 'outlined' | 'text';
   size?: 'small' | 'medium' | 'large';
   onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  type?: 'submit' | 'reset' | 'button';
 }
 
 const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
@@ -18,12 +19,13 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   },
 }));
 
-export function ButtonBase({ text, variant, size, onClick }: ButtonBaseProps) {
+export function ButtonBase({ text, variant, size, onClick, type }: ButtonBaseProps) {
   return (
   <StyledButton 
     variant={variant} 
     size={size}
     onClick={onClick} 
+    type={type}
   >
     {text}
   </StyledButton>
