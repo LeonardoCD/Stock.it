@@ -12,6 +12,7 @@ export const TextInputContainer = styled.label<ContainerProps>`
   flex-direction: column;
   position: relative;
   width: 100%;
+  border-radius: 8px;
 
   fieldset {
     border-color: ${(props) => {

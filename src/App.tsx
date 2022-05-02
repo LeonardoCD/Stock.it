@@ -1,10 +1,10 @@
-// import {Login} from  './pages/Login';
-import { SingUp } from './pages/SingUp';
+import {Login} from  './pages/Login';
+// import { SingUp } from './pages/SingUp';
 
 
 function App() {
   return (
-    <SingUp />
+    <Login />
   );
 }
 

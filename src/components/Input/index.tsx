@@ -1,6 +1,7 @@
 import { InputAdornment, styled } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useRef, useState } from 'react';
+
 import {
   ChangeHandler,
   FieldError,
@@ -66,6 +67,7 @@ export const CssTextField = styled(TextField)({
     '& .MuiOutlinedInput-input': {
       fontFamily: 'Roboto',
       backgroundColor: '#181B23',
+      borderRadius: '8px',
     },
     '& .MuiFormControl-root': {
       width: '100%',
@@ -127,7 +129,6 @@ export function Input({
         inputRef={inputRef}
         onChange={(e) => setValue(e.target.value)}
         defaultValue={defaultValue}
-        // maxLength={max}
         sx={{
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
@@ -137,6 +138,7 @@ export function Input({
           },
         }}
       />
+      { !!invalid && <span style={{color: '#E03222', marginTop: '0.2rem' }}>{invalid.message}</span>}
     </S.TextInputContainer>
   )
 }
