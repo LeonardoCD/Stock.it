@@ -13,6 +13,7 @@ export const TextInputContainer = styled.label<ContainerProps>`
   position: relative;
   width: 100%;
   border-radius: 8px;
+  max-height: 5rem;
 
   fieldset {
     border-color: ${(props) => {
