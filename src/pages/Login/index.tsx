@@ -7,6 +7,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { UserSingIn } from '../../utils/types/userTypes';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
+import { api } from '../../services/api';
+import { useSnackbar } from 'notistack';
+
 
 
 const signInFormSchema = yup.object().shape({
@@ -15,9 +18,31 @@ const signInFormSchema = yup.object().shape({
 });
 
 export function Login() {
+  const { enqueueSnackbar } = useSnackbar();
 
-  const singIn: SubmitHandler<UserSingIn> = (data) => {
-    console.log(data);
+  const singIn: SubmitHandler<UserSingIn> = async (data) => {
+    try {
+      const response = await api.get(`/user?search=${data.password}`);
+
+      if(data.password === response.data[0].senha 
+        && data.email === response.data[0].email) {
+        enqueueSnackbar('Login efetuado com sucesso!', {
+          variant: 'success',
+        });
+
+        //Redireciona para a página de produtos
+        //Salva o token do usuário no localStorage
+      } else {
+        enqueueSnackbar('E-mail ou senha incorretos', {
+          variant: 'error',
+        });
+      }
+
+    } catch {
+      enqueueSnackbar('Falha ao fazer login!', {
+        variant: 'error',
+      });
+    }
   }
 
   const { register, handleSubmit, formState } = useForm<UserSingIn>({
@@ -28,7 +53,6 @@ export function Login() {
 
   return (
     <>
-      <Header />
       <S.LoginContainer onSubmit={handleSubmit(singIn)}>
         <h1>Bem-vindo de volta!</h1>
         <p>Para continuar informe seu e-mail e sua senha</p>

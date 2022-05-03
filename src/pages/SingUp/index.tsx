@@ -7,18 +7,24 @@ import Grid from '@mui/material/Grid';
 import * as S from "./styles";
 import { CustomSelect } from "../../components/Select";
 import { BasicDatePicker } from "../../components/DatePicker";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { UserSingUp } from "../../utils/types/userTypes";
 
 
 export function SingUp() {
   const {
     control,
-  } = useForm({ defaultValues: { type: 'AMOUNT' } });
+    register,
+    handleSubmit,
+  } = useForm<UserSingUp>({});
+
+  const singUp: SubmitHandler<UserSingUp> = (data) => {
+    console.log(data);
+  }
 
   return (
     <>
-      <Header />
-      <S.SingUpContainer>
+      <S.SingUpContainer onSubmit={handleSubmit(singUp)}>
         <Stack spacing={2}>
           <h1>Que bom que quer se juntar a nós!</h1>
           <p>Primeiro precisamos saber um pouco mais sobre você:</p>
@@ -26,31 +32,32 @@ export function SingUp() {
 
         <Grid container spacing={8}>
           <Grid item xs={6}>
-            <Input label='Nome' type='text' />
+            <Input label='Nome' type='text' register={{...register('name')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Sobrenome' type='text' />
+            <Input label='Sobrenome' type='text' register={{...register('surname')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='CPF' type='text' />
+            <Input label='CPF' type='text' register={{...register('cpf')}} />
           </Grid>
           <Grid item xs={6}>
             <CustomSelect
-              name="sexo"
               label="Sexo"
               options={[
-                { value: 1, label: 'Masculino' },
-                { value: 2, label: 'Feminino' },
-                { value: 3, label: 'Outro' },
+                { value: 'sexo 1', label: 'Masculino' },
+                { value: 'sexo 2', label: 'Feminino' },
+                { value: 'sexo 3', label: 'Outro' },
               ]}
+              control={control}
+              {...register('sex')}
             />
           </Grid>
           <Grid item xs={6}>
             <BasicDatePicker
-              name="initial"
               label="Data de Nascimento"
               control={control}
               testid="initial"
+              {...register('birthDate')}
             />
           </Grid>
         </Grid>
@@ -59,33 +66,33 @@ export function SingUp() {
 
         <Grid container spacing={8}>
           <Grid item xs={6}>
-            <Input label='E-mail' type='email' />
+            <Input label='E-mail' type='email' register={{...register('email')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Senha' type='password' />
+            <Input label='Senha' type='password' register={{...register('password')}}/>
           </Grid>
         </Grid>
 
         <h1>Agora diz pra gente de onde você é:</h1>
 
         <Grid container spacing={8}>
-          <Grid item xs={6}>
-            <Input label='CEP' type='text' />
+          <Grid item xs={12}>
+            <Input label='CEP' type='text' register={{...register('cep')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Cidade' type='text' />
+            <Input label='Estado' type='text' register={{...register('state')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Estado' type='text' />
+            <Input label='Cidade' type='text' register={{...register('city')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Logradouro' type='text' />
+            <Input label='Bairro' type='text' register={{...register('neighborhood')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Bairro' type='text' />
+            <Input label='Logradouro' type='text' register={{...register('publicPlace')}}/>
           </Grid>
-          <Grid item xs={6}>
-            <Input label='Complemento' type='text' />
+          <Grid item xs={12}>
+            <Input label='Complemento' type='text' register={{...register('complement')}}/>
           </Grid>
         </Grid>
 
@@ -93,7 +100,7 @@ export function SingUp() {
           text='Enviar'
           variant='contained'
           size='large'
-          onClick={() => console.log('clicou')}
+          type='submit'
         />
       </S.SingUpContainer>
     </>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SingUpContainer = styled.div`
+export const SingUpContainer = styled.form`
   display: flex;
   flex-direction: column;
   text-align: center;
