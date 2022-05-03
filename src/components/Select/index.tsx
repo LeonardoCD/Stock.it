@@ -131,7 +131,6 @@ export function CustomSelect({
             if (unControlledonChange) unControlledonChange(e.target.value);
             if (e.target.value) {
               setIsNotEmpty(true);
-              console.log('control');
             }
           }}
           style={{ marginTop: 0 }}
