@@ -7,9 +7,11 @@ export const ProductContainer = styled.form`
   width: 80%;
   height: fit-content;
   padding: 2rem;
+  padding-bottom: 0;
   background-color: var(--gray800);
   border-radius: 15px;
   color: #ffffff;
+  margin-bottom: 1rem;
 
   h1 {
     font-size: var(--bigger);

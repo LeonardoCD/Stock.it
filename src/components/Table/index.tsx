@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,8 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { debounce } from 'lodash';
-import * as S from './styles';
+// import { debounce } from 'lodash';
+import TablePagination from '@mui/material/TablePagination';
 
 
 const RoundedTable = {
@@ -67,7 +66,6 @@ interface EnhancedTableProps {
   rows: any[];
   headCells?: HeadCell[];
   Row: any;
-  inputPagination?: boolean;
   type: 'simple' | 'rounded';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -76,25 +74,27 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({
   rows,
   headCells,
   Row,
-  inputPagination,
   type,
   onClick,
 }) => {
   const [selected, ___] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage] = React.useState(5);
-  const [pageInput, setPageInput] = React.useState<number>(page + 1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const handleChangePage = (newPage: number): void => {
+  const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
   };
 
-  const deleyedHandleChangePage = React.useCallback(
-    debounce(handleChangePage, 1000),
-    []
-  );
+  // const deleyedHandleChangePage = React.useCallback(
+  //   debounce(handleChangePage, 1000),
+  //   []
+  // );
 
-  // Avoid a layout jump when reaching the last page with empty rows.
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -138,6 +138,17 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+          labelRowsPerPage="Produtos por página:"
+          rowsPerPageOptions={[5]}
+          sx={{color: '#FFFFFF', background: '#1F2029'}}
+        />
       </Paper>
 
     </Box>

@@ -16,7 +16,7 @@ const StyledTableRow = styled(TableRow)(() => ({
   td: {
     color: '#EEEEF2',
     borderBottom: '0.5px solid #616480',
-    textAlign: 'center',
+    justfyContent: 'center',
   },
   '&.MuiTableCell-root': {
     padding: '0.5rem !important',
