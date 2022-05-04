@@ -2,13 +2,15 @@ import * as S from './styles';
 import { Input } from '../../components/Input';
 import { Stack } from '@mui/material';
 import { ButtonBase } from '../../components/Button';
-import { Header } from '../../components/Header';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { UserSingIn } from '../../utils/types/userTypes';
+import { User, UserSingIn, UserSingUp } from '../../utils/types/userTypes';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from 'yup';
 import { api } from '../../services/api';
 import { useSnackbar } from 'notistack';
+import { Link } from 'react-router-dom';
+import {useNavigate} from "react-router-dom";
+import logo from '../../assets/logo.svg';
 
 
 
@@ -18,20 +20,25 @@ const signInFormSchema = yup.object().shape({
 });
 
 export function Login() {
+  localStorage.clear();
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const singIn: SubmitHandler<UserSingIn> = async (data) => {
     try {
       const response = await api.get(`/user?search=${data.password}`);
-
-      if(data.password === response.data[0].senha 
+      if(data.password === response.data[0].senha
         && data.email === response.data[0].email) {
         enqueueSnackbar('Login efetuado com sucesso!', {
           variant: 'success',
         });
-
-        //Redireciona para a página de produtos
-        //Salva o token do usuário no localStorage
+        
+        localStorage.setItem('userName', response.data[0].nome);
+        localStorage.setItem('userSurname', response.data[0].sobrenome);
+        localStorage.setItem('userEmail', response.data[0].email);
+        localStorage.setItem('userToken', response.data[0].token);
+        localStorage.setItem('userImage', response.data[0].image);
+        navigate('/');
       } else {
         enqueueSnackbar('E-mail ou senha incorretos', {
           variant: 'error',
@@ -53,6 +60,9 @@ export function Login() {
 
   return (
     <>
+      <S.Header>
+        <img src={logo} alt="GoBarber" />
+      </S.Header>
       <S.LoginContainer onSubmit={handleSubmit(singIn)}>
         <h1>Bem-vindo de volta!</h1>
         <p>Para continuar informe seu e-mail e sua senha</p>
@@ -74,7 +84,7 @@ export function Login() {
           <Stack>
             <span>
               Ainda não tem uma conta?
-              <a href='#'> clique aqui.</a>
+              <Link to='/singUp'> clique aqui.</Link>
             </span>
             <ButtonBase 
               text='Entrar' 
