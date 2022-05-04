@@ -1,21 +1,29 @@
 
 export interface UserSingUp {
-  name: string;
-  surname: string;
+  nome: string;
+  sobrenome: string;
   cpf: string;
-  sex: string; 
-  birthDate: string;
+  sexo: string; 
+  dt_nascimento: string;
   email: string;
-  password: string;
+  senha: string;
   cep: string;
-  city: string;
-  state: string;
-  publicPlace: string;
-  neighborhood: string;
-  complement: string;
+  cidade: string;
+  estado: string;
+  logradouro: string;
+  bairro: string;
+  complemento: string;
 }
 
 export type UserSingIn = {
   email: string;
   password: string; 
+}
+
+export type User = {
+  email: string;
+  nome: string;
+  imagem: string;
+  token: string;
+  senha: string;
 }
