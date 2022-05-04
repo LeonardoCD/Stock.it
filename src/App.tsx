@@ -11,13 +11,22 @@ function App() {
   return (
     <SnackbarProvider>
       <BrowserRouter>
-      <Header/>
-      <Routes>
-        <Route path='/' element={<Products />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/singUp' element={<SingUp />} />
-      </Routes>
-    </BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Products />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/singUp' element={<SingUp />} />
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: '1rem', textAlign: 'center'}}>
+                <p style={{ fontSize: 'var(--large)', color: '#fff', fontWeight: 'bold' }}>
+                  Nada encontrado aqui!
+                </p>
+              </main>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </SnackbarProvider>
   );
 }
