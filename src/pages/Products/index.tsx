@@ -1,112 +1,18 @@
 import { Grid, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ButtonBase } from '../../components/Button';
-import { Input } from '../../components/Input';
+import InputSearch from '../../components/InputSearch';
 import ProductItem from '../../components/ProductItem';
-import { CustomSelect } from '../../components/Select';
 import { Sidebar } from '../../components/Sidebar';
 import Table from '../../components/Table';
 import { api } from '../../services/api';
+import { debounce } from 'lodash';
 import { IProducts } from '../../utils/types/productTypes';
 import * as S from './styles';
+import { Header } from '../../components/Header';
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from 'notistack';
 
-const options = [
-  {
-    value: 'createdAt',
-    label: 'Data de criação',
-  },
-  {
-    value: 'price',
-    label: 'Preço',
-  },
-  {
-    value: 'stock',
-    label: 'Estoque',
-  },
-  {
-    value: 'sails',
-    label: 'Vendas',
-  },
-  {
-    value: 'mark',
-    label: 'Marca',
-  },
-];
-
-const rows = [
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Eugene Goldner',
-    createdAt: '10 de Abril de 2020',
-    preco: 'R$ 1.000,00',
-    stock: '12345',
-    sail: 'R$ 2.000,00',
-    mark: 'Incredible Metal Scsdcsc',
-  },
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Goldner Eugene',
-    createdAt: '20 de Abril de 2020',
-    preco: 'R$ 1.000,00',
-    stock: '12668',
-    sail: 'R$ 1.000,00',
-    mark: 'Incredible Metal Sausages',
-  },
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Eugene Goldner',
-    createdAt: '30 de Abril de 2020',
-    preco: 'R$ 3.000,00',
-    stock: '12668',
-    sail: 'R$ 1.000,00',
-    mark: 'Incredible Metal Sausages',
-  },
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Eugene Goldner',
-    createdAt: '30 de Abril de 2020',
-    preco: 'R$ 3.000,00',
-    stock: '12668',
-    sail: 'R$ 1.000,00',
-    mark: 'Incredible Metal Sausages',
-  },
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Eugene Goldner',
-    createdAt: '30 de Abril de 2020',
-    preco: 'R$ 3.000,00',
-    stock: '12668',
-    sail: 'R$ 1.000,00',
-    mark: 'Incredible Metal Sausages',
-  },
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Eugene Goldner',
-    createdAt: '30 de Abril de 2020',
-    preco: 'R$ 3.000,00',
-    stock: '12668',
-    sail: 'R$ 1.000,00',
-    mark: 'Incredible Metal Sausages',
-  },
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Eugene Goldner',
-    createdAt: '30 de Abril de 2020',
-    preco: 'R$ 3.000,00',
-    stock: '12668',
-    sail: 'R$ 1.000,00',
-    mark: 'Incredible Metal Sausages',
-  },
-  {
-    image: 'http://placeimg.com/640/480/transport',
-    name: 'Eugene Goldner',
-    createdAt: '30 de Abril de 2020',
-    preco: 'R$ 3.000,00',
-    stock: '12668',
-    sail: 'R$ 1.000,00',
-    mark: 'Incredible Metal Sausages',
-  },
-];
 
 const headCells = [
   {
@@ -147,55 +53,94 @@ const headCells = [
 ];
 
 export function Products() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<IProducts[]>([]);
+  const [searchText, setSearchText] = useState<string>('');
+  const token = localStorage.getItem('userToken');
+  const { enqueueSnackbar } = useSnackbar();
 
-  async function getProducts() {
+
+  async function getProducts(e?: string): Promise<void> {
     try {
-      const response: {data: IProducts[]} = await api.get('/produto');
+      const response: { data: IProducts[] } = await api.get('/produto' || e, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
       
-      
-      if(response.data.length > 0) {
-        console.log(response.data);
+      if (response.data.length > 0) {
         setProducts(response.data);
       } else {
-        console.log('Não há produtos cadastrados');
+        enqueueSnackbar('Erro ao buscar produtos', {
+          variant: 'error',
+        });
       }
     } catch {
-
+      enqueueSnackbar('Erro ao buscar produtos', {
+        variant: 'error',
+      });
     }
   }
 
+  function handleSearch(e: string): void {
+    setSearchText(e);
+    if (e) {
+      getProducts(`/produto?search=${e}`);
+    } else {
+      getProducts();
+    }
+  }
+
+  const delayedHandleSearch = useCallback(
+    debounce(handleSearch, 1000),
+    []
+  );
+
   useEffect(() => {
+    if (products.length > 0) {
+      delayedHandleSearch(searchText);
+    }
+  }, [searchText]);
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
     getProducts();
   }, []);
-  
+
 
   return (
-    <Stack direction='row' paddingRight='1.5rem'>
-      <Sidebar />
-      <S.ProductContainer>
-        <Grid container spacing={4} alignItems='center'>
-          <Grid item xs={2}>
-            <h1>Produtos</h1>
+    <>
+      <Header />
+      <Stack direction='row' paddingRight='1.5rem'>
+        <Sidebar />
+        <S.ProductContainer>
+          <Grid container spacing={4} alignItems='center'>
+            <Grid item xs={2}>
+              <h1>Produtos</h1>
+            </Grid>
+              <Grid item xs={8}>
+                <InputSearch
+                  label=' '
+                  fieldName='Pesquisar'
+                  placeholder='Pesquisar...'
+                  uncontrolledOnChange={() => setSearchText}
+                  style={{ width: '100%' }}
+                />
+            </Grid>
+            <Grid item xs={2}>
+              <Stack>
+                <ButtonBase text='Criar novo' variant='contained'/>
+              </Stack>
+            </Grid>
           </Grid>
-          <Grid item xs={3}>
-            <CustomSelect label='Filtrar' name='filter' options={options}/>
-          </Grid>
-          <Grid item xs={5}>
-            <Input label='Pesquisar'/>
-          </Grid>
-          <Grid item xs={2}>
-            <Stack>
-              <ButtonBase text='Criar novo' variant='contained'/>
-            </Stack>
-          </Grid>
-        </Grid>
 
-        <Stack direction='column' mt={4}>
-          <Table rows={products} headCells={headCells} Row={ProductItem} type="simple"/>
-        </Stack>
-
-      </S.ProductContainer>
-    </Stack>
+          <Stack direction='column' mt={4}>
+            <Table rows={products} headCells={headCells} Row={ProductItem} type="simple"/>
+          </Stack>
+        </S.ProductContainer>
+      </Stack>
+    </>
   );
 }
