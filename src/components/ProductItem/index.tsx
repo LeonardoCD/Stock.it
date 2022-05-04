@@ -80,10 +80,6 @@ const ProductItem: React.FC<ProductItemProps> = ({ row, labelId, onClick }) => {
         <ButtonBase
           variant="contained"
           text="Editar"
-          // style={{ height: '3rem', borderRadius: 8 }}
-          onClick={() => {
-            console.log(row);
-          }}
         />
       </TableCell>
     </StyledTableRow>

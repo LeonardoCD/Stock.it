@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-// import { debounce } from 'lodash';
 import TablePagination from '@mui/material/TablePagination';
 
 
@@ -33,7 +32,7 @@ interface EnhancedTableHeadProps {
   rowCount: number;
   headCells: HeadCell[];
 }
-// Header
+
 const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
   numSelected,
   rowCount,
@@ -84,11 +83,6 @@ const EnhancedTable: React.FC<EnhancedTableProps> = ({
   const handleChangePage = (event: unknown, newPage: number): void => {
     setPage(newPage);
   };
-
-  // const deleyedHandleChangePage = React.useCallback(
-  //   debounce(handleChangePage, 1000),
-  //   []
-  // );
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));

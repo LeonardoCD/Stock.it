@@ -5,8 +5,6 @@ export const SingUpContainer = styled.form`
   flex-direction: column;
   text-align: center;
   gap: 2rem;
-  /* justify-content: center; */
-  /* align-items: center; */
 
   margin: auto;
   width: 70%;
@@ -41,4 +39,14 @@ export const SingUpContainer = styled.form`
       color: var(--blue500);
     }
   }
+`;
+
+export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 7rem;
+  width: 100%;
+  background-color: var(--gray900);
+  padding: 1.5rem;
 `;

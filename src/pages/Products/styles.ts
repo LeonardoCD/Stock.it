@@ -20,13 +20,6 @@ export const ProductContainer = styled.form`
     font-family: 'Roboto', sans-serif;
   }
 
-  /* p {
-    font-size: var(--medium);
-    color: var(--gray200);
-    font-family: 'Inter', sans-serif;
-    margin-bottom: 2rem;
-  } */
-
   span {
     display: inline-block;
     color: '#ffffff';
