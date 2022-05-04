@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material";
 import { ButtonBase } from "../../components/Button";
-import { Header } from "../../components/Header";
 import { Input } from "../../components/Input";
 import Grid from '@mui/material/Grid';
 
@@ -9,9 +8,10 @@ import { CustomSelect } from "../../components/Select";
 import { BasicDatePicker } from "../../components/DatePicker";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { UserSingUp } from "../../utils/types/userTypes";
-
+import logo from '../../assets/logo.svg';
 
 export function SingUp() {
+  localStorage.clear();
   const {
     control,
     register,
@@ -24,6 +24,9 @@ export function SingUp() {
 
   return (
     <>
+      <S.Header>
+        <img src={logo} alt="GoBarber" />
+      </S.Header>
       <S.SingUpContainer onSubmit={handleSubmit(singUp)}>
         <Stack spacing={2}>
           <h1>Que bom que quer se juntar a nós!</h1>
@@ -32,10 +35,10 @@ export function SingUp() {
 
         <Grid container spacing={8}>
           <Grid item xs={6}>
-            <Input label='Nome' type='text' register={{...register('name')}}/>
+            <Input label='Nome' type='text' register={{ ...register('nome') }} />
           </Grid>
           <Grid item xs={6}>
-            <Input label='Sobrenome' type='text' register={{...register('surname')}}/>
+            <Input label='Sobrenome' type='text' register={{ ...register('sobrenome') }} />
           </Grid>
           <Grid item xs={6}>
             <Input label='CPF' type='text' register={{...register('cpf')}} />
@@ -49,7 +52,7 @@ export function SingUp() {
                 { value: 'sexo 3', label: 'Outro' },
               ]}
               control={control}
-              {...register('sex')}
+              {...register('sexo')}
             />
           </Grid>
           <Grid item xs={6}>
@@ -57,7 +60,7 @@ export function SingUp() {
               label="Data de Nascimento"
               control={control}
               testid="initial"
-              {...register('birthDate')}
+              {...register('dt_nascimento')}
             />
           </Grid>
         </Grid>
@@ -69,7 +72,7 @@ export function SingUp() {
             <Input label='E-mail' type='email' register={{...register('email')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Senha' type='password' register={{...register('password')}}/>
+            <Input label='Senha' type='password' register={{ ...register('senha') }} />
           </Grid>
         </Grid>
 
@@ -80,19 +83,19 @@ export function SingUp() {
             <Input label='CEP' type='text' register={{...register('cep')}}/>
           </Grid>
           <Grid item xs={6}>
-            <Input label='Estado' type='text' register={{...register('state')}}/>
+            <Input label='Estado' type='text' register={{ ...register('estado') }} />
           </Grid>
           <Grid item xs={6}>
-            <Input label='Cidade' type='text' register={{...register('city')}}/>
+            <Input label='Cidade' type='text' register={{ ...register('cidade') }} />
           </Grid>
           <Grid item xs={6}>
-            <Input label='Bairro' type='text' register={{...register('neighborhood')}}/>
+            <Input label='Bairro' type='text' register={{ ...register('bairro') }} />
           </Grid>
           <Grid item xs={6}>
-            <Input label='Logradouro' type='text' register={{...register('publicPlace')}}/>
+            <Input label='Logradouro' type='text' register={{ ...register('logradouro') }} />
           </Grid>
           <Grid item xs={12}>
-            <Input label='Complemento' type='text' register={{...register('complement')}}/>
+            <Input label='Complemento' type='text' register={{ ...register('complemento') }} />
           </Grid>
         </Grid>
 
